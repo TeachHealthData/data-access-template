@@ -1,0 +1,69 @@
+# Fallback: running in terminal/command line
+
+if for some reason there is a problem with running above commands via your r/python setup, you can try to run them in terminal. Typically this would be possible in yoru computer does not remember your DataStore password, and you need to type it in.
+
+once the connecting to DataStore worked using this method, then switch to saving/loading files in your r/python code.
+
+Adjust the DataStore url to include your username but everything else should stay the same.
+
+In each example, use only the one appropriate for your operating system (Windows / Mac). Copy-paste into terminal (on Mac) or command line (on Windows) the commands inside of ``` brackets, **one line at a time**.
+
+## Connecting to datastore... (remember to be on VPN)
+
+in below example swap YOUR_USERNAME for your student number like s1234567. If you are a supervisor, swap first one for your short staff number, and second one for the student's one
+
+So the `mount` the line below will look a bit like
+
+`mount -t smbfs smb://s1234567@cmvm.datastore.ed.ac.uk/cmvm/cmvm/groups/mvm-pgt/s1234567 ~/.temporary-data
+
+or for supervisors
+
+`mount -t smbfs smb://porzecho@cmvm.datastore.ed.ac.uk/cmvm/cmvm/groups/mvm-pgt/s1234567 ~/.temporary-data
+
+
+### Mac
+
+```{bash}
+mkdir ~/.temporary-data
+mount -t smbfs smb://YOUR_USERNAME@cmvm.datastore.ed.ac.uk/cmvm/cmvm/groups/mvm-pgt/YOUR_USERNAME ~/.temporary-data
+```
+
+### Windows
+
+```{bash}
+net use R: \\cmvm.datastore.ed.ac.uk\cmvm\cmvm\groups\mvm-pgt\YOUR_USERNAME
+```
+
+## Opening the folder
+
+### Mac
+
+```{bash}
+open ~/.temporary-data
+```
+
+### Windows
+
+```{bash}
+start R:
+```
+
+## Disconnecting from DataStore
+
+### Mac
+
+```{bash}
+umount ~/.temporary-data
+```
+
+### Windows
+
+```{bash}
+net use R: /delete
+```
+
+## Using Files on DataStore if not using provided functions (e.g. connectDatastore())
+
+Simply add the 'mounted' datastore folder on the beginning of your filename. On a Mac it is `~/.temporary-data` and on a Windows it is `R:`
+
+So e.g. if you are loading a file called `data.csv` on a Mac you will load a file `~/.temporary-data/data.csv` and on a Windows you will load a file called `R:/data.csv`

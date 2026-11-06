@@ -1,0 +1,71 @@
+---
+title: "datastore for dissertation"
+output: html_document
+---
+
+# To connect to your data you will need to go through these steps:
+
+## Manual Steps:
+
+1. Connect to a VPN, so that you appear to be 'within the university library'. You do this by hand, usually using the FortiClient app. See tech support pages (https://information-services.ed.ac.uk/computing/desktop-personal/vpn) on how to set it up (if you haven't already)
+
+## R code steps:
+
+2. Connect to your secure 'online harddrive' (called DataStore) using `connectDatastore(...)`, see examples. Below code will create a 'virtual connection' to your DataStore harddrive. By default, this is set to be named R: so please check that you don't have an R: drive before starting.
+3. You can peek into the DataStore folder with `openDatastoreFolder()` - it will appear as if it was a new harddrive or folder on your computer. Do not copy files from there by hand. Use R to load that data instead.
+4. Now you can use the DataStore files. Load and save the data using provided functions like `loadCsvWithDatastore(your_filename)` or `saveCsvWithDatastore(your_filename, some_data)`. Advanced: There are various helper functions, but if you need to build your own, e.g. you use unusual data format, just use `fileLocationOnDatastore(your_filename)` instead of `your_filename` to get the file's location for saving and loading. So e.g. instead of `load_csv("patients.tsv")` use `load_csv( fileLocationOnDatastore("patients.tsv"))`
+5. When done with accessing data, you can disconnect from DataStore with `disconnectDatastore()`
+
+# How to use this is your dissertation
+
+To use this in your dissertation code, bring the file `dataStoreScripts.R` into your project and start your markdown with this like (just once) `source("dataStoreScripts.R")`. It will give you access to all datastore functions demonstrated below. 
+
+```{r}
+source("dataStoreScripts.R")
+```
+
+# TESTING and EXAMPLES
+
+```{r}
+#load testing variables
+
+yourUsername <- "porzecho"
+yourDatastoreSpace <- "s1234567" #usually same as username
+
+  if (operatingSystemIsWindows()) {
+    # Windows
+      yourOrganisationsFolder <- "cmvm.datastore.ed.ac.uk\\cmvm\\cmvm\\groups\\mvm-pgt" 
+  } else {
+    # Mac
+    yourOrganisationsFolder <- "cmvm.datastore.ed.ac.uk/cmvm/cmvm/groups/mvm-pgt"
+  }
+```
+
+```{r}
+# attempt connecting to datastore. If this does not work for you. 1. check VPN 2. Your setup might require typing in the password, in which case refer to the `terminal_commands` file
+
+connectDatastore(yourUsername, yourDatastoreSpace, yourOrganisationsFolder, disconnectFirst = FALSE)
+```
+
+
+
+```{r}
+openDatastoreFolder()
+```
+
+```{r}
+# save random file
+test_data <- data.frame(name=c("a","b","c"), age=c(10,20,33))
+saveCsvWithDatastore(test_data, "test123.csv")
+```
+
+```{r}
+# load random file
+loadCsvWithDatastore("test123.csv")
+```
+
+```{r}
+disconnectDatastore()
+```
+
+
